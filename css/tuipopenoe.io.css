@@ -1,0 +1,14 @@
+body{
+    background-image: url(../img/background_gray_1920x1080.png);
+    background-size: cover;
+}
+
+.jumbotron{
+    margin: 15vh;
+    background: rgba(238, 238, 238, 0.9);
+}
+
+.img{
+    max-height: 20vh;
+    height: 10vh;
+}
