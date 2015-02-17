@@ -1,0 +1,18 @@
+<div><h3>Cache Amazon AWS S3 Files</h3><p>To increase your <a href="https://developers.google.com/speed/pagespeed/insights/">Google PageSpeed Insights Score</a>, one of the recommendations is to implement browser caching for your local files. Google recommends using Expires versus a Cache-Control: max-age, because it is supported by more browsers. For more recommendations on <a href="https://developers.google.com/speed/docs/insights/LeverageBrowserCaching">browser caching</a>, check their recommendations.</p><p><ol><li>To implement Browser Caching through the AWS console, open up the console to the S3 control page.</li><li>Click on the bucket that contains the assets you wish to enable caching for, and click on the properties tab.</li><li>In the properties tab, under Permissions for the Bucket, click the Add/Edit CORS configuration button.</li><li>Set the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Cross-Origin Resource Sharing</a> configuration to allow GET requests, with a max age in seconds of the time you would like your assets to be cached.</li><li>To set the MaxAgeSeconds for 10 days, use the following configuration:</li><li><pre>
+            <corsconfiguration>
+                <corsrule>
+                    <allowedorigin>
+                    *
+                    </allowedorigin>
+                    <allowedmethod>
+                    GET
+                    </allowedmethod>
+                    <maxageseconds>
+                    864000
+                    </maxageseconds>
+                    <allowedheader>
+                    Authorization
+                    </allowedheader>
+                </corsrule>
+            </corsconfiguration>
+        </pre></li><li>Save the configuration properties, and check that the assets are being cached.</li></ol></p><p>Enabling caching in this way can reduce the number of requests charged to your Amazon AWS S3 bucket, and decrease the time it takes to load your page.</p></div>

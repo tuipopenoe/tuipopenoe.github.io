@@ -1,0 +1,19 @@
+{
+  "name": "tuipopenoe_github_io",
+  "version": "0.1.0",
+  "description": "Tui Popenoe's Blog",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuipopenoe/tuipopenoe.github.io"
+  },
+  "author": "Tui Popenoe",
+  "homepage": "https://tuipopenoe.github.io",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-htmlmin": "^0.4.0",
+    "grunt-contrib-cssmin": "^0.12.1",
+    "grunt-contrib-imagemin": "^0.9.3",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

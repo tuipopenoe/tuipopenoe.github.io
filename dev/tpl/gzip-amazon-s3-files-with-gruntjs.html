@@ -1,0 +1,31 @@
+<div><p><a href="https://console.aws.amazon.com/console/home">Amazon AWS</a> provides an <a href="http://docs.aws.amazon.com/gettingstarted/latest/swh/website-hosting-intro.html">excellent guide</a> to creating and hosting a static web page. However, this guide lacks a lot of the small optimizations that will really make your webpage stand out (and load blazingly fast). One of the biggest things you can do to improve the performance of your page is serve compressed files.</p><p>Google's <a href="https://developers.google.com/speed/pagespeed/insights/">Page Speed Insights</a> recommends <a href="https://developers.google.com/speed/docs/insights/EnableCompression">enabling compression</a> for HTTP requests, which can reduce the transferred response by up to 90%. Normally, you would configure your server to enable compression, however as Amazon AWS S3 serves static files, it takes some work to achieve this.</p><p>On unix based machines, you can use the<pre>gzip</pre>utility to manually gzip the required files. To manually gzip on Windows, you will have to use a third-party such as <a href="www.7-zip.org/">7-Zip</a>. However, this is very time consuming and repetitive, so the best solution is to use an automation tool to do this task for us.</p><p><a href="http://gruntjs.com/">GruntJS</a> is a JavaScript task runner that allows you to automate a huge amount of repetitive build tasks. When creating a static web page on Amazon AWS S3, Grunt can save you lots of time. If you have never used Grunt before, I recommend reading their <a href="http://gruntjs.com/getting-started">Getting Started</a> guide first.</p><p>If you didn't read the <a href="http://gruntjs.com/getting-started">Getting Started</a> guide, use the following commands to setup your project to use Grunt. Grunt is based on a plugin system, so we will setup a<pre>package.json</pre>file and a<pre>Gruntfile.js</pre>and install the<pre>compress</pre>plugin.<ul><li>Create a<pre>package.json</pre>file for your project. You can do this using <a href="https://www.npmjs.com/">NodeJS package manager NPM</a>. Once you have Node installed simply execute<pre>npm init</pre>in your project's root folder to create a basic<pre>package.json</pre>file.</li><li>The basic specification of your<pre>package.json</pre>file should look like this:<pre>
+        {
+          "name": "my-project-name",
+          "version": "0.1.0",
+          "devDependencies": {
+          }
+        }
+    </pre></li><li>After you have created your<pre>package.json</pre>file, add grunt by executing<pre>npm install grunt --save-dev</pre>. This will install the latest version of Grunt into your project folder, and add it to your devDependencies. Simlilarly, run<pre>npm install grunt-contrib-compress --save-dev</pre>to install the compress plugin.</li><li>After<pre>package.json</pre>has been fully configured, create the<pre>Gruntfile.js</pre>in the root directory. A Gruntfile that only uses the<pre>compress</pre>plugin should look like this:<br><pre>
+    module.exports = function(grunt) {
+        // Project Configuration
+        grunt.initConfig({
+            pkg: grunt.file.readJSON('package.json'),
+            compress: {
+                dist: {
+                    options: {
+                        mode: 'gzip',
+                        pretty: true
+                    },
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['**/*'],
+                    dest: 'dist/'
+                }
+            }
+        });
+        // Load the plugin that provides the "compress" task.
+        grunt.loadNpmTasks('grunt-contrib-compress');
+        // Default task runt using "grunt" on the command line
+        grunt.registerTask('default', ['compress']);
+    };
+    </pre><br>This assumes that your project assets are stored in the<pre>src/</pre>directory, and that you want the output of the compress action to be saved in the<pre>dist/</pre>directory</li><li>Once all that is configured properly, execute the Grunt tasks by running<pre>grunt</pre>from your command line in your project root directory. You should see the output of the compression in your terminal.</li></ul></p><p><ul><li>After Grunt has been successfully run, and the gzipped files are located in your<pre>dist/<pre> directory, uploaded them to your Amazon AWS S3 bucket of choice.</pre></pre></li><li>Open the bucket, and for each file, access it's properties tab.</li><li>Under<pre>Metadata</pre>, drop-down, click the button "Add more metadata"</li><li>Set the Key to "Content-Encoding" and the Value to "gzip"</li><li>Save the changes, and your site should now be serving the gzipped file to browsers everywhere.</li></ul></p></div>
